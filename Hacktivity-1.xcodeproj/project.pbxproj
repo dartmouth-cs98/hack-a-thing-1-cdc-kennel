@@ -14,6 +14,7 @@
 		A820F7451F6D9CD800E5D529 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A820F7441F6D9CD800E5D529 /* Assets.xcassets */; };
 		A820F7481F6D9CD800E5D529 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A820F7461F6D9CD800E5D529 /* LaunchScreen.storyboard */; };
 		A820F7521F6DA05000E5D529 /* car.scn in Resources */ = {isa = PBXBuildFile; fileRef = A820F7511F6DA05000E5D529 /* car.scn */; };
+		A8955F341F6DA49400451A60 /* road.scn in Resources */ = {isa = PBXBuildFile; fileRef = A8955F331F6DA49400451A60 /* road.scn */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		A820F7471F6D9CD800E5D529 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A820F7491F6D9CD800E5D529 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A820F7511F6DA05000E5D529 /* car.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = car.scn; path = art.scnassets/car.scn; sourceTree = "<group>"; };
+		A8955F331F6DA49400451A60 /* road.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = road.scn; path = art.scnassets/road.scn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 				A820F7441F6D9CD800E5D529 /* Assets.xcassets */,
 				A820F7461F6D9CD800E5D529 /* LaunchScreen.storyboard */,
 				A820F7491F6D9CD800E5D529 /* Info.plist */,
+				A8955F331F6DA49400451A60 /* road.scn */,
 			);
 			path = "Hacktivity-1";
 			sourceTree = "<group>";
@@ -131,6 +134,7 @@
 			files = (
 				A820F7521F6DA05000E5D529 /* car.scn in Resources */,
 				A820F73E1F6D9CD800E5D529 /* art.scnassets in Resources */,
+				A8955F341F6DA49400451A60 /* road.scn in Resources */,
 				A820F7481F6D9CD800E5D529 /* LaunchScreen.storyboard in Resources */,
 				A820F7451F6D9CD800E5D529 /* Assets.xcassets in Resources */,
 				A820F7431F6D9CD800E5D529 /* Main.storyboard in Resources */,
