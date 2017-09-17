@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Volumes/Extension/Git/Hacktivity-1/Hacktivity-1/art.scnassets/roadStraightLong.obj">
+      location = "group:volks.mtl">
    </FileRef>
    <FileRef
-      location = "self:Hacktivity-1.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
