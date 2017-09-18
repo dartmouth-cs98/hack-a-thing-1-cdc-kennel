@@ -13,6 +13,10 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
+    var anchors = [ARAnchor]()
+    var nodes = [SCNNode]()
+    var planeHeight: CGFloat = 0.01
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +39,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -63,6 +68,22 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     }
 */
     
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        var node:  SCNNode?
+        if let planeAnchor = anchor as? ARPlaneAnchor {
+            node = SCNNode()
+            let planeGeometry = SCNBox(width: CGFloat(planeAnchor.extent.x), height: planeHeight, length: CGFloat(planeAnchor.extent.z), chamferRadius: 0.0)
+            planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
+            planeGeometry.firstMaterial?.specular.contents = UIColor.white
+            let planeNode = SCNNode(geometry: planeGeometry)
+            planeNode.position = SCNVector3Make(planeAnchor.center.x, Float(planeHeight / 2), planeAnchor.center.z)
+            node?.addChildNode(planeNode)
+            anchors.append(planeAnchor)
+            
+        }
+        return node
+    }
+
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
