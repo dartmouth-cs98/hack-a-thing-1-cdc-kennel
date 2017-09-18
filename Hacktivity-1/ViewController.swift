@@ -17,7 +17,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var banchor: ARAnchor?
     var node: SCNNode?
     var roadNode: SCNNode?
-    var planeHeight: CGFloat = 0.01
+    var carNode: SCNNode?
+    var planeHeight: CGFloat = 0.005
+    
+    var isTesting: Bool = false;
 
     
     override func viewDidLoad() {
@@ -35,9 +38,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Set the scene to the view
         sceneView.scene = scene
         
-        let tempScene = SCNScene(named: "art.scnassets/road.scn")!
-        roadNode = tempScene.rootNode
+        // Load the road
+        let tempRoadScene = SCNScene(named: "art.scnassets/road.scn")!
+        roadNode = tempRoadScene.rootNode
         
+        // Load the car
+        let tempCarScene = SCNScene(named: "art.scnassets/volks.scn")!
+        carNode = tempCarScene.rootNode
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,20 +84,31 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         var node:  SCNNode?
         if let planeAnchor = anchor as? ARPlaneAnchor {
-            print("We out here.png")
             node = SCNNode()
-            let planeGeometry = SCNBox(width: CGFloat(planeAnchor.extent.x), height: planeHeight, length: CGFloat(planeAnchor.extent.z), chamferRadius: 0.0)
-            planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
-            planeGeometry.firstMaterial?.specular.contents = UIColor.white
-            let planeNode = SCNNode(geometry: planeGeometry)
-            planeNode.position = SCNVector3Make(planeAnchor.center.x, Float(planeHeight / 2), planeAnchor.center.z)
-            node?.addChildNode(planeNode)
+            
+            if (isTesting) { // enable for seeing plane
+                let planeGeometry = SCNBox(width: CGFloat(planeAnchor.extent.x), height: planeHeight, length: CGFloat(planeAnchor.extent.z), chamferRadius: 0.0)
+                planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
+                planeGeometry.firstMaterial?.specular.contents = UIColor.white
+                let planeNode = SCNNode(geometry: planeGeometry)
+                planeNode.position = SCNVector3Make(planeAnchor.center.x, Float(planeHeight / 2), planeAnchor.center.z)
+                node?.addChildNode(planeNode)
+            }
+            
             banchor = planeAnchor
             
+            // Place the road
             let newRoadNode = roadNode?.clone()
             if let newRoadNode = newRoadNode {
-                newRoadNode.position = SCNVector3Make(planeAnchor.center.x, 0, planeAnchor.center.z)
+                newRoadNode.position = SCNVector3Make(planeAnchor.center.x, (isTesting ? 0.01 : 0), planeAnchor.center.z)
                 node?.addChildNode(newRoadNode)
+            }
+            
+            // Place the car
+            let newCarNode = carNode?.clone()
+            if let newCarNode = newCarNode {
+                newCarNode.position = SCNVector3Make(planeAnchor.center.x, 0, planeAnchor.center.z)
+                node?.addChildNode(newCarNode)
             }
         }
         return node
