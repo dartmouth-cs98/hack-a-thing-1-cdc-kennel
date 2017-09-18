@@ -13,8 +13,10 @@ import ARKit
 class ViewController: UIViewController, ARSCNViewDelegate {
 
     @IBOutlet var sceneView: ARSCNView!
-    var anchors = [ARAnchor]()
-    var nodes = [SCNNode]()
+    
+    var banchor: ARAnchor?
+    var node: SCNNode?
+    var roadNode: SCNNode?
     var planeHeight: CGFloat = 0.01
 
     
@@ -28,10 +30,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/road.scn")!
+        let scene = SCNScene()
         
         // Set the scene to the view
         sceneView.scene = scene
+        
+        let tempScene = SCNScene(named: "art.scnassets/road.scn")!
+        roadNode = tempScene.rootNode
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +77,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         var node:  SCNNode?
         if let planeAnchor = anchor as? ARPlaneAnchor {
+            print("We out here.png")
             node = SCNNode()
             let planeGeometry = SCNBox(width: CGFloat(planeAnchor.extent.x), height: planeHeight, length: CGFloat(planeAnchor.extent.z), chamferRadius: 0.0)
             planeGeometry.firstMaterial?.diffuse.contents = UIColor.green
@@ -78,8 +85,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             let planeNode = SCNNode(geometry: planeGeometry)
             planeNode.position = SCNVector3Make(planeAnchor.center.x, Float(planeHeight / 2), planeAnchor.center.z)
             node?.addChildNode(planeNode)
-            anchors.append(planeAnchor)
+            banchor = planeAnchor
             
+            let newRoadNode = roadNode?.clone()
+            if let newRoadNode = newRoadNode {
+                newRoadNode.position = SCNVector3Make(planeAnchor.center.x, 0, planeAnchor.center.z)
+                node?.addChildNode(newRoadNode)
+            }
         }
         return node
     }
