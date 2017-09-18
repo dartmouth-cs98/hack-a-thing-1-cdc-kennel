@@ -39,7 +39,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.scene = scene
         
         // Load the road
-        let tempRoadScene = SCNScene(named: "art.scnassets/road.scn")!
+        let tempRoadScene = SCNScene(named: "art.scnassets/track.scn")!
         roadNode = tempRoadScene.rootNode
         
         // Load the car
