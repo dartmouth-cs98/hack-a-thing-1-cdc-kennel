@@ -19,9 +19,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     var roadNode: SCNNode?
     var carNode: SCNNode?
     var planeHeight: CGFloat = 0.005
-    
     var isTesting: Bool = false;
-
+    
+    // Psuedo-random numbers
+    var trackWidth: CGFloat = 0.09
+    var trackHeight: CGFloat = 0.13
+    
+    var timeToLap: Double = 3.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -100,18 +104,81 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             // Place the road
             let newRoadNode = roadNode?.clone()
             if let newRoadNode = newRoadNode {
-                newRoadNode.position = SCNVector3Make(planeAnchor.center.x, (isTesting ? 0.01 : 0), planeAnchor.center.z)
+                newRoadNode.position = SCNVector3Make(planeAnchor.center.x, (isTesting ? Float(planeHeight * 2) : 0), planeAnchor.center.z)
                 node?.addChildNode(newRoadNode)
             }
             
             // Place the car
             let newCarNode = carNode?.clone()
             if let newCarNode = newCarNode {
-                newCarNode.position = SCNVector3Make(planeAnchor.center.x, 0, planeAnchor.center.z)
+                addDrivingAnimation(node: newCarNode, center: planeAnchor.center)
+                newCarNode.position = SCNVector3Make(planeAnchor.center.x + Float(trackWidth), 0, planeAnchor.center.z)
                 node?.addChildNode(newCarNode)
             }
         }
         return node
+    }
+    
+    // Animation
+    func addDrivingAnimation(node: SCNNode, center: vector_float3) {
+        // Position animation
+        let positionAnimation = CAKeyframeAnimation(keyPath: #keyPath(SCNNode.position))
+        
+        positionAnimation.values = [
+            SCNVector3Make(center.x + Float(trackWidth), 0, center.z),
+            SCNVector3Make(center.x + Float(trackWidth), 0, center.z + Float(trackHeight)),
+            SCNVector3Make(center.x - Float(trackWidth), 0, center.z + Float(trackHeight)),
+            SCNVector3Make(center.x - Float(trackWidth), 0, center.z - Float(trackHeight)),
+            SCNVector3Make(center.x + Float(trackWidth), 0, center.z - Float(trackHeight)),
+            SCNVector3Make(center.x + Float(trackWidth), 0, center.z),
+        ]
+        
+        positionAnimation.keyTimes = [
+            0,
+            1,
+            2.5,
+            4.5,
+            6,
+            7
+        ]
+        positionAnimation.duration = timeToLap
+        positionAnimation.repeatCount = .infinity
+        
+        // Rotation animation
+        let rotationAnimation = CAKeyframeAnimation(keyPath: #keyPath(SCNNode.eulerAngles))
+        
+        rotationAnimation.values = [
+            SCNVector3Make(0, 0, 0),
+            SCNVector3Make(0, 0, 0),
+            SCNVector3Make(0, -90 * .pi / 180, 0),
+            SCNVector3Make(0, -90 * .pi / 180, 0),
+            SCNVector3Make(0, -180 * .pi / 180, 0),
+            SCNVector3Make(0, -180 * .pi / 180, 0),
+            SCNVector3Make(0, -270 * .pi / 180, 0),
+            SCNVector3Make(0, -270 * .pi / 180, 0),
+            SCNVector3Make(0, -360 * .pi / 180, 0),
+            SCNVector3Make(0, -360 * .pi / 180, 0),
+        ]
+        
+        // A pretty hacked together way to make the timings right
+        rotationAnimation.keyTimes = [
+            0,
+            1,
+            2,
+            3.5,
+            4.5,
+            6.5,
+            7.5,
+            9,
+            10,
+            11
+        ]
+        rotationAnimation.duration = timeToLap
+        rotationAnimation.repeatCount = .infinity
+        
+        node.removeAllAnimations()
+        node.addAnimation(positionAnimation, forKey: "positionAnimation")
+        node.addAnimation(rotationAnimation, forKey: "rotationAnimation")
     }
 
     func session(_ session: ARSession, didFailWithError error: Error) {
