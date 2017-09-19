@@ -13,7 +13,7 @@ It was really cool to work with ARKit. It is surprisingly user friendly to start
 ### What didn't work
 Linking movements of one asset to another. All calculations were relative to the anchored plane, not to the track asset itself, which required some weird calibration with the asset GUI in xcode. We also did not know how to make an endless road that would expend with the horizon of the moving phone (would be really difficult with plane detection and anchoring).
 
-## Screenshots and Video
+### Screenshots and Video
 See the screenshots and video folder.
 
 ### Assets
